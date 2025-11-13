@@ -1,0 +1,25 @@
+# Products
+GET http://localhost:3000/products
+
+### Single Product
+GET http://localhost:3000/products/69141798cac7daa0369a8b98
+
+### Create new Product
+
+POST http://localhost:3000/products HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Chocolate Cookies Pack (500g)",
+  "category": "Snacks",
+  "price": 4.29,
+  "brand": "SweetBite",
+  "stock": 110,
+  "refundable": true,
+  "storeId": "672fa1b2e1c8d0a4b8a8f101",
+  "expirationDate": "2026-03-22",
+  "description": "Crunchy chocolate chip cookies with real cocoa butter.",
+  "createdAt": "2025-11-11T00:00:00Z"
+}
+
+### Update Product
