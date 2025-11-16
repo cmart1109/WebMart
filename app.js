@@ -16,8 +16,8 @@ app.use((req,res,next) => {
 });
 
 app.use('/', require('./routes/index'));
-app.use('/products', require('./routes/products'))
-
+app.use('/products', require('./routes/products'));
+app.use('/stores', require('./routes/stores'));
 
 mongodb.initDb((err) => {
     if (err) {
