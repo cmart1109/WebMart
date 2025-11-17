@@ -8,7 +8,7 @@
   "servers": [
     {
       "url": "https://webmart-6w30.onrender.com",
-      "description": "Simple REST API for products and stores using MongoDB."
+      "description": "Render Deployment"
     }
   ],
   "paths": {
@@ -37,6 +37,7 @@
         }
       }
     },
+
     "/products/{id}": {
       "get": {
         "summary": "Get a single product",
@@ -185,7 +186,15 @@
             "enum": ["official", "third-party"]
           }
         },
-        "required": ["name", "address", "city", "country", "opening_hour", "closing_hour", "type"]
+        "required": [
+          "name",
+          "address",
+          "city",
+          "country",
+          "opening_hour",
+          "closing_hour",
+          "type"
+        ]
       }
     }
   }
