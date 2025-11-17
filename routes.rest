@@ -78,7 +78,7 @@ PUT  http://localhost:3000/stores/691a7eee24122e4d51e485f0 HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "NorthPoint Grocery Hub",
+  "name": "NorthPoint DoubleStore Hub",
   "address": "742 Maple Drive",
   "city": "Chicago",
   "country": "USA",
