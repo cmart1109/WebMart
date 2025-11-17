@@ -28,12 +28,13 @@ const createStore = async (req,res) => {
           opening_hour: req.body.opening_hour,
           closing_hour: req.body.closing_hour,
           type: req.body.type
+          
      }
-     const response = await mongodb.getDatabase().db().collection('stores').insertOne(store);
-     if (response.aknowledged) {
+     const response = await mongodb.getDatabase().db().collection('Stores').insertOne(store);
+     if (response.acknowledged) {
           res.status(204).send();
      } else {
-          res.status(500),json(response.error || `Some error ocurred while creating the store`)
+          res.status(500).json(response.error || `Some error ocurred while creating the store`)
      }
 }
 
@@ -49,7 +50,7 @@ const updateStore = async (req,res) => {
           type: req.body.type
      }
      const response = await mongodb.getDatabase().db().collection('Stores').replaceOne({_id: storeId}, store);
-     if (response.moifiedCount > 0) {
+     if (response.modifiedCount > 0) {
           res.status(204).send();
      } else {
           res.status(500).json(response.error || 'Some error ocurred while updating the store.')

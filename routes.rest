@@ -1,3 +1,8 @@
+#---------------------------------------------------------------#
+# This file got all the routes that i am using for this project
+#---------------------------------------------------------------#
+
+# First we are getting the routes for the products
 # Products
 GET http://localhost:3000/products
 
@@ -7,7 +12,7 @@ GET http://localhost:3000/products/69141798cac7daa0369a8b98
 ### Create new Product
 
 POST http://localhost:3000/products HTTP/1.1
-content-type: application/json
+Content-Type: application/json
 
 {
   "name": "Chocolate Cookies Pack (500g)",
@@ -23,3 +28,64 @@ content-type: application/json
 }
 
 ### Update Product
+
+PUT http://localhost:3000/products/69141798cac7daa0369a8b98 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Chocolate Cookies Double-Pack (500g)",
+  "category": "Snacks",
+  "price": 5.29,
+  "brand": "Snickers",
+  "stock": 1200,
+  "refundable": false,
+  "storeId": "672fa1b2e1c8d0a4b8a8f101",
+  "expirationDate": "2026-03-22",
+  "description": "Crunchy chocolate chip cookies with real cocoa butter.",
+  "createdAt": "2025-11-11T00:00:00Z"
+}
+###  Delete Product
+DELETE http://localhost:3000/products/69141798cac7daa0369a8b98 HTTP/1.1
+
+
+# And now we are getting the routes for the stores
+### Get All Stores 
+
+GET http://localhost:3000/stores
+
+
+### Get Single Store
+GET http://localhost:3000/stores/691a5a6ed9f4a7bb55895718
+
+### Creating new Store
+ 
+POST http://localhost:3000/stores HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "NorthPoint Grocery Hub",
+  "address": "742 Maple Drive",
+  "city": "Chicago",
+  "country": "USA",
+  "opening_hour": "07:00",
+  "closing_hour": "19:00",
+  "type": "third-party"
+}
+
+
+### Updating a Store
+PUT  http://localhost:3000/stores/691a7eee24122e4d51e485f0 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "NorthPoint Store Hub",
+  "address": "742 Maple Drive",
+  "city": "Chicago",
+  "country": "USA",
+  "opening_hour": "07:00",
+  "closing_hour": "19:00",
+  "type": "third-party"
+}
+
+### Deleting a Store
+DELETE  http://localhost:3000/stores/691a65b0e72221f3c1211ef8 HTTP/1.1
