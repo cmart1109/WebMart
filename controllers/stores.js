@@ -8,6 +8,7 @@ const getAllStores = async (req,res) => {
          result.toArray().then((stores) => {
               res.setHeader('Content-Type', 'application/json')
               res.status(200).json(stores)
+              
          })
      } catch (err) {
           next(err)
@@ -20,7 +21,8 @@ const getSingleStore = async (req,res) => {
           const result = await mongodb.getDatabase().db().collection('Stores').find({_id: storeId});
           result.toArray().then((Stores) => {
                res.setHeader('Content-Type', 'application/json')
-               res.status(200).json(Stores[0])
+               res.s
+               tatus(200).json(Stores[0])
           })
      } catch (err) {
           next(err)
@@ -38,7 +40,6 @@ const createStore = async (req,res) => {
                opening_hour: req.body.opening_hour,
                closing_hour: req.body.closing_hour,
                type: req.body.type
-               
           }
           const response = await mongodb.getDatabase().db().collection('Stores').insertOne(store);
           if (response.acknowledged) {
