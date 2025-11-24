@@ -11,11 +11,27 @@ const cors = require('cors')
 require('dotenv').config();
 
 
-
-if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
-    console.warn('GitHub OAuth env vars not set: skipping GitHub passport strategy initialization');
-} else {
-    passport.use(new githubStrategy({
+app
+.use(bodyParser.json())
+.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+}))
+.use(passport.initialize())
+.use(passport.session())
+.use((req,res,next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Z-Key'
+    );
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    next();
+})
+.use(cors({ origin: '*'}))
+.use('/', require('./routes/index'))
+passport.use(new githubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL: process.env.callbackURL
@@ -24,7 +40,6 @@ if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
         return done(null, profile)
     }
     ));
-}
 
 passport.serializeUser((user, done) => {
     done(null, user);
@@ -33,30 +48,9 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-app
-    .use(bodyParser.json())
-    .use(session({
-        secret: 'secret',
-        resave: false,
-        saveUninitialized: true,
-    }))
-    .use(passport.initialize())
-    .use(passport.session())
-    .use((req,res,next) => {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader(
-            'Access-Control-Allow-Headers',
-            'Origin, X-Requested-With, Content-Type, Accept, Z-Key'
-        );
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        next();
-    })
-    .use(cors({ methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']}))
-    .use(cors({ origin: '*'}))
-    .use('/', require('./routes/index'))
-    .use('/products', require('./routes/products'))
-    .use('/stores', require('./routes/stores'))
-    .use(errorHandler)
+app.use('/products', require('./routes/products'));
+app.use('/stores', require('./routes/stores'));
+app.use(errorHandler);
 app.get('/', (req,res) => {
     res.send(req.session.user !== undefined ? `Logged in as ${req.session.displayName}` : 'Logged Out') 
 })
