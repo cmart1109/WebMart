@@ -8,6 +8,30 @@ const passport = require('passport');
 const session = require('express-session');
 const githubStrategy = require('passport-github2').Strategy;
 const cors = require('cors')
+require('dotenv').config();
+
+
+
+if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+    console.warn('GitHub OAuth env vars not set: skipping GitHub passport strategy initialization');
+} else {
+    passport.use(new githubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: process.env.callbackURL
+    },
+    function(accessToken, refreshToken, profile, done) {
+        return done(null, profile)
+    }
+    ));
+}
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
 
 app
     .use(bodyParser.json())
@@ -16,6 +40,8 @@ app
         resave: false,
         saveUninitialized: true,
     }))
+    .use(passport.initialize())
+    .use(passport.session())
     .use((req,res,next) => {
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader(
@@ -31,16 +57,17 @@ app
     .use('/products', require('./routes/products'))
     .use('/stores', require('./routes/stores'))
     .use(errorHandler)
-    passport.use(new githubStrategy({
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientServer: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: process.env.callbackURL
-    },
-    function(accessToken, refreshToken, profile, done) {
-        return done(null, profile)
-    }
-));
+app.get('/', (req,res) => {
+    res.send(req.session.user !== undefined ? `Logged in as ${req.session.displayName}` : 'Logged Out') 
+})
 
+app.get('/github/callback', passport.authenticate('github', {
+    failureRedirect: '/api-docs', 
+    session: false
+}), (req,res) => {
+    req.session.user = req.user;
+    res.redirect('/')
+})
 
 mongodb.initDb((err) => {
     if (err) {
